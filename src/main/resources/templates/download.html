@@ -1,0 +1,33 @@
+<html>
+<head>
+    <a href="/upload"> <--  업로드 페이지로 </a>
+    <title>파일 다운로드 페이지</title>
+</head>
+<body>
+<h2>파일 다운로드 페이지</h2>
+<ul id="file_list"></ul>
+
+<script>
+    async function getFileList() {
+        try {
+            const response = await fetch('/api/v1/rest/aws/list');
+            const result = await response.json();
+            const fileListElement = document.getElementById('file_list');
+
+            result.forEach(file => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `/api/v1/rest/aws/download?fileName=${file}`;
+                a.textContent = file;
+                li.appendChild(a);
+                fileListElement.appendChild(li);
+            });
+        } catch (error) {
+            console.error('파일 목록을 가져오는 중 오류 발생:', error);
+        }
+    }
+
+    window.addEventListener('load', getFileList);
+</script>
+</body>
+</html>
